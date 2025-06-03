@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Pranto - ChatGPT Clone</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #chatbox {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .logo img {
+      max-width: 100px;
+    }
+    .message {
+      margin: 10px 0;
+    }
+    .user { text-align: right; color: #007bff; }
+    .bot { text-align: left; color: #28a745; }
+    input, button {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div id="chatbox">
+    <div class="logo">
+      <img src="/mnt/data/Logo.png" alt="Mini Pranto Logo">
+    </div>
+    <div id="messages"></div>
+    <input type="text" id="userInput" placeholder="Ask anything...">
+    <button onclick="handleInput()">Send</button>
+    <div class="footer">Made By Pranto Sarder</div>
+  </div>
+
+  <script>
+    async function handleInput() {
+      const inputElem = document.getElementById('userInput');
+      const userInput = inputElem.value.trim();
+      if (!userInput) return;
+
+      appendMessage(userInput, 'user');
+      inputElem.value = '';
+
+      const response = await fetch('https://your-backend-url.com/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: userInput })
+      });
+
+      const data = await response.json();
+      appendMessage(data.reply, 'bot');
+    }
+
+    function appendMessage(text, sender) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${sender}`;
+      msgDiv.textContent = text;
+      document.getElementById('messages').appendChild(msgDiv);
+    }
+  </script>
+</body>
+</html>
